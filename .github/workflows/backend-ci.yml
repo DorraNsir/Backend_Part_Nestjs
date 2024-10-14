@@ -24,18 +24,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      
-
       - name: Build application
         run: npm run build
         
+      - name: Debugging
+        run: echo "EC2_HOST is: ${{ secrets.EC2_HOST }}"  # Remove or comment out this line in production
+
       - name: Deploy to EC2 (Dev)
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}  # Ensure this secret is set in your repo
-          EC2_HOST: ${{ secrets.EC2_HOST }}              # Ensure this secret is set in your repo
-          EC2_USER: ${{ secrets.EC2_USER }}              # Ensure this secret is set in your repo
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
+          echo "Attempting to connect to $EC2_HOST"
           scp -o StrictHostKeyChecking=no -i private_key.pem -r ./* $EC2_USER@$EC2_HOST:/path/to/your/dev-backend
           ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST "cd /path/to/your/dev-backend && npm install && npm run start"
