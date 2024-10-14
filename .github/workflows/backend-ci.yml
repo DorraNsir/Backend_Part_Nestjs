@@ -3,7 +3,6 @@ name: Backend CI
 on:
   push:
     branches:
-      
       - main
   pull_request:
     branches:
@@ -28,8 +27,9 @@ jobs:
       - name: Build application
         run: npm run build
         
-      - name: Debugging
-        run: echo "EC2_HOST is: ${{ secrets.EC2_HOST }}"  # Remove or comment out this line in production
+      - name: Debug EC2 Host
+        run: |
+          echo "EC2_HOST is: ${{ secrets.EC2_HOST }}"  # This is just for debugging
 
       - name: Deploy to EC2 (Dev)
         env:
