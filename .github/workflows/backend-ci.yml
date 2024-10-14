@@ -26,12 +26,10 @@ jobs:
 
       - name: Build application
         run: npm run build
-      - name: debug
-        run: |
-            echo "hiiiiiiiiiiiiiiiiiiiiiii"
+        
       - name: Debug EC2 Variables
         run: |
-          echo "SSH_PRIVATE_KEY is set: ${#{{ secrets.EC2_SSH_KEY }}} characters"
+          if [ -z "${{ secrets.EC2_SSH_KEY }}" ]; then echo "SSH_PRIVATE_KEY is not set"; else echo "SSH_PRIVATE_KEY is set"; fi
           echo "EC2_HOST is: ${{ secrets.EC2_HOST }}"
           echo "EC2_USER is: ${{ secrets.EC2_USER }}"
           echo "Checking if variables are empty..."
