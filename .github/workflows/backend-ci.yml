@@ -26,10 +26,17 @@ jobs:
 
       - name: Build application
         run: npm run build
-        
-      - name: Debug EC2 Host
+      - name: debug
         run: |
-          echo "EC2_HOST is: ${{ secrets.EC2_HOST }}"  # This is just for debugging
+            echo "hiiiiiiiiiiiiiiiiiiiiiii"
+      - name: Debug EC2 Variables
+        run: |
+          echo "SSH_PRIVATE_KEY is set: ${#{{ secrets.EC2_SSH_KEY }}} characters"
+          echo "EC2_HOST is: ${{ secrets.EC2_HOST }}"
+          echo "EC2_USER is: ${{ secrets.EC2_USER }}"
+          echo "Checking if variables are empty..."
+          if [ -z "${{ secrets.EC2_HOST }}" ]; then echo "EC2_HOST is not set"; fi
+          if [ -z "${{ secrets.EC2_USER }}" ]; then echo "EC2_USER is not set"; fi
 
       - name: Deploy to EC2 (Dev)
         env:
