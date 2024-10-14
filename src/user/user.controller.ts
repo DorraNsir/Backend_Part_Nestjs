@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,6 +21,11 @@ export class UserController {
   @UsePipes(new ValidationPipe({ transform: true }))
   login(@Body() loginDto: LoginDto) {
     return this.userService.loginUser(loginDto);
+  }
+
+  @Post('refresh-auth')
+  refreshAuth(@Query('refreshToken') refreshToken: string) {
+    return this.userService.refreshAuthToken(refreshToken);
   }
   
   @Post()

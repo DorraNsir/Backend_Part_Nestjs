@@ -44,11 +44,13 @@ export class UserService {
   }
   private async signInWithEmailAndPassword(email: string, password: string) {
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.APIKEY}`;
-    return await this.sendPostRequest(url, {
+    const response = await this.sendPostRequest(url, {
       email,
       password,
       returnSecureToken: true,
     });
+    console.log('Firebase login response:', response);
+    return response;
   }
   private async sendPostRequest(url: string, data: any) {
     try {
@@ -88,6 +90,35 @@ export class UserService {
       }
       return false;
     }
+  }
+
+  async refreshAuthToken(refreshToken: string) {
+    try {
+      const {
+        id_token: idToken,
+        refresh_token: newRefreshToken,
+        expires_in: expiresIn,
+      } = await this.sendRefreshAuthTokenRequest(refreshToken);
+      return {
+        idToken,
+        refreshToken: newRefreshToken,
+        expiresIn,
+      };
+    } catch (error: any) {
+      if (error.message.includes('INVALID_REFRESH_TOKEN')) {
+        throw new Error(`Invalid refresh token: ${refreshToken}.`);
+      } else {
+        throw new Error('Failed to refresh token');
+      }
+    }
+  }
+  private async sendRefreshAuthTokenRequest(refreshToken: string) {
+    const url = `https://securetoken.googleapis.com/v1/token?key=${process.env.APIKEY}`;
+    const payload = {
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+    };
+    return await this.sendPostRequest(url, payload);
   }
   
 
