@@ -9,12 +9,12 @@ import { AuthGuard } from 'guards/auth.guard';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService ) {}
 
   @Post('register')
   @UsePipes(new ValidationPipe({ transform: true }))
   registerUser(@Body() registerUserDTo: RegisterUserDto) {
-    return this.userService.registerUser(registerUserDTo);
+    return this.userService.registerUser(registerUserDTo,);
   }
 
   @Post('login')
@@ -40,6 +40,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
@@ -54,4 +55,11 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
+ /* 
+  @Post('send-email')
+  async sendMail(@Body() dto: sendEmailDto ,recipients:string) {
+    await this.userService.sendEmail(recipients,dto);
+    return { message: 'Email sent successfully to '+recipients };
+  }
+    */
 }

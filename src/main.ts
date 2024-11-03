@@ -20,7 +20,7 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
 //firebase ;
-const firebaseKeyFilePath = path.join(__dirname, '..', 'firebaseCredential.json'); // Adjust this based on your structure
+const firebaseKeyFilePath = path.join(__dirname, '..', '/src/firebaseCredential.json'); // Adjust this based on your structure
 const firebaseServiceAccount /*: ServiceAccount*/ = JSON.parse(
 fs.readFileSync(firebaseKeyFilePath).toString(),
 );
@@ -31,6 +31,6 @@ firebaseAdmin.initializeApp({
 });
 }
 
-  await app.listen(process.env.PORT);
+  await app.listen(3000);
 }
 bootstrap();
