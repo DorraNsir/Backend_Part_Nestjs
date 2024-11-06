@@ -5,7 +5,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import * as firebaseAdmin from 'firebase-admin';
 import axios from 'axios';
 import { LoginDto } from './dto/login.dto';
-import { MailerService } from '@nest-modules/mailer';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UserService {
@@ -25,7 +25,7 @@ export class UserService {
 
         to: registerUser.email,
         subject: 'confirmation Email',
-        template: './welcom',
+        template: 'welcome',
         context: {
         name: registerUser.firstName,
         confirmationCode,
